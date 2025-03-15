@@ -57,8 +57,15 @@ p {
     width: 100%;
     height: 300px;
     background-color: chartreuse;
- 
 }
+
+.caption {
+    font-family: 'Sometype Mono', monospace;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+
 
 
 
