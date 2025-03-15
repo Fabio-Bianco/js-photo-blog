@@ -67,7 +67,7 @@ p {
 /* Responsive */
 @media (max-width: 768px) {
     .photo-card {
-        width: 200px;
+        width: 300px;
     }
 }
 
@@ -77,6 +77,10 @@ p {
     }
     .photo-card {
         width: 150px;
+    }
+
+    .photo-card {
+        width: 300px;
     }
 }
 
