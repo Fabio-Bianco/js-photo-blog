@@ -1,63 +1,46 @@
-const summerPhoto = [
-  {
-    id: 1,
-    title: "Skate Park",
-    date: "01-07-2024",
-    url: "https://marcolanci.it/boolean/assets/pictures/1.png",
-  },
-  {
-    id: 2,
-    title: "Passeggiata",
-    date: "16-07-2024",
-    url: "https://marcolanci.it/boolean/assets/pictures/2.png",
-  },
-  {
-    id: 3,
-    title: "Alpi",
-    date: "01-07-2024",
-    url: "https://marcolanci.it/boolean/assets/pictures/3.png",
-  },
-  {
-    id: 4,
-    title: "Sagra",
-    date: "21-08-2024",
-    url: "https://marcolanci.it/boolean/assets/pictures/4.png",
-  },
-  {
-    id: 5,
-    title: "Watergun",
-    date: "23-08-2024",
-    url: "https://marcolanci.it/boolean/assets/pictures/5.png",
-  },
-  {
-    id: 6,
-    title: "Riviera",
-    date: "30-08-2024",
-    url: "https://marcolanci.it/boolean/assets/pictures/6.png",
-  },
-];
+//  Selezione degli elementi principali della pagina
+const overlay = document.getElementById("overlay");       // L'overlay che copre lo schermo quando un'immagine viene cliccata
+const overlayImg = document.getElementById("overlay-img"); // L'elemento <img> dentro l'overlay, che mostrerà l'immagine ingrandita
+const closeBtn = document.getElementById("close-btn");     // Il pulsante per chiudere l'overlay
+const photoContainer = document.getElementById("photo-container"); // Il contenitore delle foto
 
-const photoContainer = document.getElementById("photo-container");
+//  Funzione per mostrare l'overlay con l'immagine selezionata
+function showOverlay(imageUrl) {
+    overlayImg.src = imageUrl;  // Imposta l'immagine nell'overlay con quella cliccata
+    overlay.classList.add("show"); // Aggiunge la classe "show" per rendere visibile l'overlay
+}
 
-axios
-  .get("https://lanciweb.github.io/demo/api/pictures/")
-  .then((response) => {
-    response.data.slice(0, 5).forEach((obj) => {
-      const card = document.createElement("div");
-      card.classList.add("photo-card");
+//  Chiudi l'overlay quando si clicca sulla "X"
+closeBtn.onclick = () => overlay.classList.remove("show");
 
-      card.innerHTML = `
-        <img src="img/pin.svg" class="pin" alt="Pin">
-        <div class="photo">
-          <img class="img-in" src="${obj.url}" alt="${obj.url}">
-        </div>
-        <p class="caption">${obj.date}</p>
-        <p class="title">${obj.title}</p>
-        
-      `;
-      photoContainer.appendChild(card);
-    });
-  })
-  .catch((error) =>
-    console.error("Errore nel caricamento delle immagini:", error)
-  );
+//  Chiudi l'overlay anche se l'utente clicca **fuori dall'immagine**
+overlay.onclick = (remuve) => {
+    if (remuve.target === overlay) { // Controlla se il click è avvenuto sull'overlay (non sull'immagine o sul bottone)
+        overlay.classList.remove("show"); // Nasconde l'overlay rimuovendo la classe "show"
+    }
+};
+
+//  Gestione del click su qualsiasi immagine (anche quelle caricate dinamicamente)
+photoContainer.onclick = (add) => {
+    if (add.target.classList.contains("img-in")) { // Controlla se l'elemento cliccato ha la classe "img-in" (quindi è un'immagine)
+        showOverlay(add.target.src); // Se sì, chiama la funzione per aprire l'overlay con l'immagine cliccata
+    }
+};
+
+//  Chiamata AJAX per ottenere le immagini dinamicamente dall'API
+axios.get("https://lanciweb.github.io/demo/api/pictures/")
+    .then(response => { // Se la richiesta ha successo:
+        response.data.slice(0, 5).forEach(obj => { // Prende solo le prime 5 immagini dell'array ricevuto dall'API
+            photoContainer.innerHTML += ` 
+                <div class="photo-card">
+                    <img src="img/pin.svg" class="pin" alt="Pin">
+                    <div class="photo">
+                        <img class="img-in" src="${obj.url}" alt="Immagine"> <!-- Qui si aggiunge dinamicamente l'immagine -->
+                    </div>
+                    <p class="caption">${obj.date}</p>  <!-- Data della foto -->
+                    <p class="title">${obj.title}</p>   <!-- Titolo della foto -->
+                </div>
+            `;
+        });
+    })
+    .catch(error => console.error("Errore nel caricamento delle immagini:", error)); // Se c'è un errore, lo stampa in console
