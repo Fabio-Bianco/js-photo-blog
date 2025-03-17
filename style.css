@@ -119,6 +119,7 @@ header {
  
 }
 
+
 /* Close Button */
 .close-btn {
   position: absolute;
@@ -158,12 +159,6 @@ header {
   }
 }
 
-@media (max-width: 480px) {
-
-  .photo-card {
-      width: 150px;
-  }
-}
 
 
 @media (min-width: 1400px) {
@@ -171,6 +166,5 @@ header {
   .photo-container {
       width: 960px
 }
-
 
 }
