@@ -10,35 +10,38 @@ function showOverlay(imageUrl) {
     overlay.classList.add("show"); // Aggiunge la classe "show" per rendere visibile l'overlay
 }
 
-//  Chiudi l'overlay quando si clicca sulla "X"
-closeBtn.onclick = () => overlay.classList.remove("show");
+//  Chiudi l'overlay quando si clicca sul tasto chiudi
+closeBtn.addEventListener("click", () => {
+    overlay.classList.remove("show");
+});
 
 //  Chiudi l'overlay anche se l'utente clicca **fuori dall'immagine**
-overlay.onclick = (remuve) => {
-    if (remuve.target === overlay) { // Controlla se il click è avvenuto sull'overlay (non sull'immagine o sul bottone)
+overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) { // Controlla se il click è avvenuto sull'overlay (non sull'immagine o sul bottone)
         overlay.classList.remove("show"); // Nasconde l'overlay rimuovendo la classe "show"
     }
-};
+});
 
 //  Gestione del click su qualsiasi immagine (anche quelle caricate dinamicamente)
-photoContainer.onclick = (add) => {
-    if (add.target.classList.contains("img-in")) { // Controlla se l'elemento cliccato ha la classe "img-in" (quindi è un'immagine)
-        showOverlay(add.target.src); // Se sì, chiama la funzione per aprire l'overlay con l'immagine cliccata
+photoContainer.addEventListener("click", (event) => {
+    if (event.target.classList.contains("img-in")) { // Controlla se l'elemento cliccato ha la classe "img-in"
+        showOverlay(event.target.src); // Se sì, chiama la funzione per aprire l'overlay con l'immagine cliccata
     }
-};
+});
 
 //  Chiamata AJAX per ottenere le immagini dinamicamente dall'API
 axios.get("https://lanciweb.github.io/demo/api/pictures/")
     .then(response => { // Se la richiesta ha successo:
-        response.data.slice(0, 5).forEach(obj => { // Prende solo le prime 5 immagini dell'array ricevuto dall'API
+        photoncontainer.innerHTML = '';
+        response.data.slice(0, 5).forEach(obj => { // Prende solo le prime 5 immagini
             photoContainer.innerHTML += ` 
                 <div class="photo-card">
                     <img src="img/pin.svg" class="pin" alt="Pin">
                     <div class="photo">
-                        <img class="img-in" src="${obj.url}" alt="Immagine"> <!-- Qui si aggiunge dinamicamente l'immagine -->
+                        <img class="img-in" src="${obj.url}" alt="Immagine">
                     </div>
-                    <p class="caption">${obj.date}</p>  <!-- Data della foto -->
-                    <p class="title">${obj.title}</p>   <!-- Titolo della foto -->
+                    <p class="caption">${obj.date}</p>
+                    <p class="title">${obj.title}</p>
                 </div>
             `;
         });

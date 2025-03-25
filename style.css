@@ -130,6 +130,7 @@ header {
   height: 40px;
   font-size: 1em;
   cursor: pointer;
+  transition: all 0,7;
   margin: 0 auto;
   justify-content: center;
   
@@ -152,14 +153,17 @@ header {
   opacity: 1;
 }
 
+.photo-card:hover {
+  rotate: 10deg;
+  scale: 1.1;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .photo-card {
       width: 300px;
   }
 }
-
-
 
 @media (min-width: 1400px) {
 
